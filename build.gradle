@@ -32,6 +32,6 @@ github {
     targetCommitish = 'master'
     name = getVersionName()
     assets = [
-            'build/libs/lm-wlp-plugin-$version.jar'
+            'build/libs/xlr-lm-artifactory-plugin-$version.jar'
     ]
 }

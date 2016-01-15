@@ -1,12 +1,7 @@
 import os ,sys, time, ast,datetime
-import pprint
 import string
 import random
-from java.lang import String
-from java.util import Arrays
-from org.apache.commons.collections.list import FixedSizeList;
 
-import xml.etree.ElementTree as ET
 from string import Template
 
 from overtherepy import SshConnectionOptions, OverthereHost, OverthereHostSession
@@ -48,7 +43,7 @@ class DarBuildServer(object):
         response = self.execute_command("/bin/rm -rf %s" %(dirName))
         response = self.execute_command("/bin/rm -rf %s" %(appVersion))
 
-        
+
 
     def import_ear(self, appName, appVersion, deployable, url):
         self.download_file_into_dar(appName, appVersion,deployable, str(url))
