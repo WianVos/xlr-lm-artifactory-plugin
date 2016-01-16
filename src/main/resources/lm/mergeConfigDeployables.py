@@ -1,12 +1,6 @@
-import sys, time, ast, os
-
-import xml.parsers.expat
 import xml.etree.ElementTree as ET
 
-import pprint
 
-from java.lang import String
-from java.util import Arrays
 
 from lm.DarBuildServer import DarBuildServer
 

@@ -2,7 +2,6 @@ buildscript {
     repositories {
         jcenter()
     }
-
     dependencies {
         classpath 'co.riiid:gradle-github-plugin:0.3.1'
         classpath 'net.saliman:gradle-properties-plugin:1.4.4'
