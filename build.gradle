@@ -21,16 +21,4 @@ version=getVersionName()
 apply plugin: 'net.saliman.properties'
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'co.riiid.gradle'
 
-github {
-    owner = 'wianvos'
-    repo = 'xlr-lm-artifactory-plugin'
-    token = "$github_token"
-    tagName = getVersionName()
-    targetCommitish = 'master'
-    name = getVersionName()
-    assets = [
-            'build/libs/xlr-lm-artifactory-plugin-$version.jar'
-    ]
-}
