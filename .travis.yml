@@ -1,5 +1,8 @@
+
 language: java
 sudo: false
+before_deploy:
+  - export GIT_TAG=$(git describe)
 deploy:
   provider: releases
   file_glob: true
@@ -8,3 +11,4 @@ deploy:
   file: builds/libs/*.jar
   on:
     repo: WianVos/xlr-lm-artifactory-plugin
+    tags: true
