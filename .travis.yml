@@ -11,4 +11,4 @@ deploy:
   file: builds/libs/*.jar
   on:
     repo: WianVos/xlr-lm-artifactory-plugin
-    tags: true
+    tags: false
