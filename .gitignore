@@ -8,5 +8,4 @@
 out
 gen
 build
-gradle/wrapper/*
 .gradle
