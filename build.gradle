@@ -21,7 +21,8 @@ def getVersionName = { ->
     return stdout.toString().trim()
 }
 
-version=getVersionName()
+#version=getVersionName()
+version='0.1.0'
 apply plugin: 'net.saliman.properties'
 apply plugin: 'java'
 apply plugin: 'idea'

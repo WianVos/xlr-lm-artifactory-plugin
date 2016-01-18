@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/WianVos/xlr-lm-artifactory-plugin.svg?branch=master)](https://travis-ci.org/WianVos/xlr-lm-artifactory-plugin)
+
 # Xlrelease Artifactory Plugin
 
 This plugin allows for the further integration of Artifactory into an XL-Release/Xl-Deploy infrastructure.
