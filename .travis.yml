@@ -1,6 +1,7 @@
 
 language: java
 sudo: false
+
 before_deploy:
   - export GIT_TAG=$(git describe)
 deploy:
@@ -8,7 +9,7 @@ deploy:
   file_glob: true
   api_key:
     secure: IdNIH+ujJxxwerBMAQiGXYDhWaI4RKy2b1xZ2PB1CJmOaepV9xjDwzzY6OWS8vs/sZaQF8x6EvotAA5spDGyh5wk8v74d8ugFO+xTkamOpA/FGY51K4eOUhKC2XMsF6XEd931jiI3bTlSaV3/3EcAhpVo7jqBzLHzQk4Vn/Wr0Ghk9T89S2uAWQm8aJrVFY9mUCZi3a4nY5vidEPpF0d5EnTRRFv6YCvCuyuYuzzXTLjZY4BaixO0oU5bBzHSXTafZCI9y8xduLVc6+g4rwOtzTDdDtc62PPjlIAqKY1tgAD5+lS699XGNw7xyi07teQjMeNS2o/xGU9FSjvBryyuOjq3L6+EJJv4wLEw0geCtr3ExJc37SQboXQJDngn3BS1UN5Jpr0wycsapXmS0X3Juex1WaRWoCO/LBG3Gf9gy+W+dMdorhHcIIOlc+c6t5UKBKk4w4pf/VreFAuyeRbywXtd1q2Qb9UrYyoqCcpz95CDcOCHR2GsbSM50N6T6aTow5OgEv9fb7qcqKetsbAJgLjS0m0vqNf8UpS7CXcPo/WeIdhda03QELxiUzk9bVMSyd485IhTmuTXZOsZMDdWmLWq9b6z11AYC/W7ctp8gOViFWBi+wwyObm1hgANohRh7bhAkLBC2wSHbTQZMZAaau9/uRKnI66Ypm5ARYC+7Y=
-  file: builds/libs/*.jar
+  file: build/libs/xlr-lm-artifactory-plugin-*.jar
   on:
     repo: WianVos/xlr-lm-artifactory-plugin
     tags: false
