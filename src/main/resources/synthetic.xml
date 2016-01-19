@@ -3,8 +3,6 @@
 
 <!-- RTC integration stuff -->
 
-    <type type="xldeploy.Server" extends="configuration.HttpConnection"/>
-    <type type="artifactory.Server" extends="configuration.HttpConnection"/>
 
 <!-- Dar Builder -->
      <type type="lm.DarBuildServer" extends="xlrelease.Configuration">

@@ -2,14 +2,11 @@ buildscript {
     repositories {
         jcenter()
     }
+
     dependencies {
         classpath 'co.riiid:gradle-github-plugin:0.3.1'
         classpath 'net.saliman:gradle-properties-plugin:1.4.4'
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
 }
 
 def getVersionName = { ->
@@ -21,8 +18,20 @@ def getVersionName = { ->
     return stdout.toString().trim()
 }
 
-version='0.1.2'
+version=getVersionName()
 apply plugin: 'net.saliman.properties'
 apply plugin: 'java'
 apply plugin: 'idea'
-
+apply plugin: 'co.riiid.gradle'
+println 'build/libs/xlr-lm-artifactory-plugin-${getVersionName}.jar'
+github {
+    owner = 'wianvos'
+    repo = 'xlr-lm-artifactory-plugin'
+    token = "$github_token"
+    tagName = getVersionName()
+    targetCommitish = 'master'
+    name = getVersionName()
+    assets = [
+            "build/libs/xlr-lm-artifactory-plugin-"+getVersionName()+".jar"
+    ]
+}
