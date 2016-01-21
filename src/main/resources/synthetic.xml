@@ -41,6 +41,14 @@
        <property name="scriptLocation" default="lm/addDeployablesFromArtifactoryRepo.py" hidden="true" />
     </type>
 
+    <type type="lm.addDeployablesFromHttpList" description="get all deployables from artifactory repo" extends="lm.createDarPackage">
+       <property name="artifactList" label="comma seperated list of artifacts. url;type" category="input" kind="string" size="large" required="false" default="none" />
+       <property name="deployableXmlList" label="comma seperated list of artifacts. url;type" category="input" size="large" kind="string" required="false" default="none" />
+       <property name="defaultXml" label="default xml when not specified in List" category="input" size="large" />
+       <property name="linkOnly" label="inlcude by link" category="input" kind="boolean" default="true" required="true" />
+       <property name="scriptLocation" default="lm/addDeployablesFromArtifactoryRepo.py" hidden="true" />
+    </type>
+
     <type type="lm.addPlainCI" description="add a ci without and artifact" extends="lm.createDarPackage">
         <property name="deployableName" category="input" label="Deployable Name" kind="string" required="true"/>
         <property name="deployableType" category="input" label="Deployable Type" kind="string" required="true"/>

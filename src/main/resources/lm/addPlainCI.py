@@ -26,7 +26,7 @@ output = server.read_manifest(appName, appVersion)
 
 root = ET.fromstring(output)
 
-deployable = get_deployable_element(deployableName, deployableType, deployableXml, os.path.basename(deployableUrl))
+deployable = get_deployable_element(deployableName, deployableType, deployableXml)
 
 for child in root:
   if child.tag == "deployables":
