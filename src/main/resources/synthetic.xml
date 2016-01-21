@@ -53,6 +53,7 @@
         <property name="deployableName" category="input" label="Deployable Name" kind="string" required="true"/>
         <property name="deployableType" category="input" label="Deployable Type" kind="string" required="true"/>
         <property name="deployableUrl" category="input" label="Url to download the Deployable from" kind="string" required="false"/>
+        <property name="linkOnly" label="inlcude by link" category="input" kind="boolean" default="true" required="true" />
         <property name="deployableXml" category="input" size="large" label="Deployable Type Aditional XML" kind="string" required="false"/>
         <property name="scriptLocation" default="lm/addPlainCI.py" hidden="true" />
     </type>

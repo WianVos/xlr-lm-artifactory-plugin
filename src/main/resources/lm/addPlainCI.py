@@ -10,8 +10,12 @@ from java.util import Arrays
 
 from lm.DarBuildServer import DarBuildServer
 
-def get_deployable_element(dName, dType, dXml):
-    deployable =  ET.Element(dType, name="%s" % dName)
+def get_deployable_element(dName, dType, dXml, dUrl=None):
+    if linkOnly:
+        deployable =  ET.Element(dType, name="%s" % dName, fileUri="%s" % dUrl)
+    else:
+        deployable =  ET.Element(dType, name="%s" % dName)
+
     if dXml:
       addons = ET.fromstring(dXml)
       for addon in addons:
@@ -26,7 +30,7 @@ output = server.read_manifest(appName, appVersion)
 
 root = ET.fromstring(output)
 
-deployable = get_deployable_element(deployableName, deployableType, deployableXml)
+deployable = get_deployable_element(deployableName, deployableType, deployableXml, deployableUrl)
 
 for child in root:
   if child.tag == "deployables":
