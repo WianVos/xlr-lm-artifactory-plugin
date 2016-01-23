@@ -192,7 +192,6 @@ class Party:
                   response = {}
                 else:
                   response = json.loads(raw_response.text)
-
                 try:
                     if response['files']:
                         for i in response['files']:

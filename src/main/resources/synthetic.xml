@@ -55,6 +55,7 @@
         <property name="deployableUrl" category="input" label="Url to download the Deployable from" kind="string" required="false"/>
         <property name="linkOnly" label="inlcude by link" category="input" kind="boolean" default="true" required="true" />
         <property name="deployableXml" category="input" size="large" label="Deployable Type Aditional XML" kind="string" required="false"/>
+        <property name="deployableXmlUrl" category="input"  label="Deployable Type Aditional XML Url" kind="string" required="false"/>
         <property name="scriptLocation" default="lm/addPlainCI.py" hidden="true" />
     </type>
 
@@ -75,6 +76,7 @@
     <type type="lm.cleanDarPackageWorkspace" description="clean up the Dar workspace" extends="lm.createDarPackage">
         <property name="scriptLocation" default="lm/cleanDarWorkspace.py" hidden="true" />
     </type>
+
     <type type="lm.addEarFromArtifactory" description="download an earfile from artifactory and add it to a Dar package" extends="lm.createDarPackage">
         <property name="deployableName" category="input" label="Deployable Name" kind="string" required="true"/>
         <property name="deployableType" category="input" label="Deployable Type" kind="string" required="true"/>
@@ -86,6 +88,12 @@
     <type type="lm.addArtifactByHttp" description="download an artifact an add it into a dar package" extends="lm.addEarFromArtifactory">
         <property name="scriptLocation" default="lm/addArtifactByHttp.py" hidden="true" />
     </type>
-
+    <!--- new stuff -->
+    <type type="lm.darProfile" description="build a dar package from an input file" extends="lm.createDarPackage" >
+        <property name="xldeployServer" category="input" label="xldeploy server" referenced-type="xldeploy.Server" kind="ci"/>
+        <property name="scriptLocation" default="lm/darProfile.py" hidden="true" />
+        <property name="inputJson" required="true" category="input" size="large" label="project in json string" />
+        <property name="phaseName" required="true" category="input" size="large" default="build" label="phase to execute these tasks in" />
+    </type>
 
 </synthetic>
