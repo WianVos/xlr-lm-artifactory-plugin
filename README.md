@@ -10,6 +10,7 @@ It does this by combining several steps in a xl-release phase while making use o
 
 ## TODO
 - document and clean code
+- figure out build and test
 
 ## Use case
 For a certain client there was a string need to build a dar file out of deployable artifact files which are stored in artifactory and so called config (xl-deploy ci's which do not contain any actual tangeble artifacts)
