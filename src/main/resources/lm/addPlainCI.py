@@ -1,4 +1,4 @@
-import requests,re, os
+import requests,re, os, sys
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 from lm.DarBuildServer import DarBuildServer
@@ -6,6 +6,15 @@ from lm.DarBuildServer import DarBuildServer
 
 default_encoding = "utf-8"
 re_space = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
+
+
+
+def check_available(url):
+    print requests.head(url).status_code
+    if  requests.head(url).status_code > 400:
+        return False
+    else:
+        return True
 
 def well_formed_xml(xml_string):
     """
@@ -105,7 +114,6 @@ if deployableXml and deployableXmlUrl:
     print "deployableXml and deployableXmlUrl are both set. deployableXmlUrl takes precedence"
 
 if deployableXmlUrl:
-
     additional_xml = get_additional_xml_from_url(deployableXmlUrl)
 elif deployableXml:
     additional_xml = deployableXml
@@ -119,6 +127,14 @@ manifest = server.read_manifest(appName, appVersion)
 
 #translate the string in to an element tree
 manifest_root = ET.fromstring(manifest)
+
+# check if the stuff where about to add actually exists
+if checkArtifactAvailability:
+   if check_available(deployableUrl):
+       print "artifact exists, moving on"
+   else:
+       print "artifact does not exist, existing"
+       sys.exit(2)
 
 # encode the deployable element
 if linkOnly:

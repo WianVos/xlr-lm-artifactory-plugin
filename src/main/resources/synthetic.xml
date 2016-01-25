@@ -56,6 +56,7 @@
         <property name="linkOnly" label="inlcude by link" category="input" kind="boolean" default="true" required="true" />
         <property name="deployableXml" category="input" size="large" label="Deployable Type Aditional XML" kind="string" required="false"/>
         <property name="deployableXmlUrl" category="input"  label="Deployable Type Aditional XML Url" kind="string" required="false"/>
+        <property name="checkArtifactAvailability" category="input" default="true" kind="boolean" />
         <property name="scriptLocation" default="lm/addPlainCI.py" hidden="true" />
     </type>
 
