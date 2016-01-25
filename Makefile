@@ -1,4 +1,8 @@
-all: build
+all: build_jar release_github
 
-build:
-	./gradlew build githubRelease
+
+build_jar:
+	./gradlew build 
+
+release_github:
+	./gradlew githubRelease
