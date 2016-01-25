@@ -1,4 +1,4 @@
 language: java
 sudo: false
-script:
-  - make all
+install:
+    - go get github.com/aktau/github-release
