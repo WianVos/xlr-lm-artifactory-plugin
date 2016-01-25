@@ -95,6 +95,7 @@
         <property name="inputJson" required="false" category="input" size="large" label="profile in json string" />
         <property name="inputJsonUrl" required="false" category="input" size="large" label="url to download the json profile from" />
         <property name="phaseName" required="true" category="input" size="large" default="build" label="phase to execute these tasks in" />
+        <property name="variables" required="false" category="input" label="variables needed to be set for this profile: preferable as comma seperated key value pair eg. buildNumber=${buildNumber} " />
     </type>
 
 </synthetic>

@@ -117,7 +117,7 @@ def handle_profile(profile, targetPhase):
             final_data_items = dict(data_item.items() + __default_data_items.items())
             title_nr += 1
 
-            createSimpleTask(phaseId, taskTypeValue, "dar_build_task_%i" % (title_nr), final_data_items )
+            createSimpleTask(phaseId, taskTypeValue, "dar_build_task_%s_%i" % (type, title_nr), final_data_items )
 
 # both inputJson and inputJsonUrl cannot be None .
 # we need input
