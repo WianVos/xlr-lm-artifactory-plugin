@@ -11,7 +11,7 @@ re_space = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
 
 def check_available(url):
     print requests.head(url).status_code
-    if  requests.head(url).status_code > 400:
+    if  requests.head(url).status_code > 499:
         return False
     else:
         return True
