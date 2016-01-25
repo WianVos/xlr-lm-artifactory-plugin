@@ -5,7 +5,7 @@
 #
 import com.xhaus.jyson.JysonCodec as json
 from com.xebialabs.deployit.plugin.api.reflect import Type
-
+import requests
 __type_step_dict = {"cis":        "lm.addPlainCI",
                     "config" :    "lm.mergeConfigDeployables"}
 
@@ -75,10 +75,24 @@ def load_profile(profile):
     :return:
     """
 
-    if type(profile) == dict:
+    if type(profile) is dict:
         return profile
     else:
        return json.loads(profile)
+
+def download_json_profile(url):
+    print "downloading json from %s" % url
+    error = 300
+    output = requests.get(url)
+
+    if ( output.status_code < error ) :
+        print "Download from %s : succesfull" % url
+        print str(output.text)
+        return str(output.text)
+    else:
+        print 'unable to download json'
+        return False
+
 
 def handle_profile(profile, targetPhase):
     """
@@ -105,7 +119,17 @@ def handle_profile(profile, targetPhase):
 
             createSimpleTask(phaseId, taskTypeValue, "dar_build_task_%i" % (title_nr), final_data_items )
 
+# both inputJson and inputJsonUrl cannot be None .
+# we need input
+if inputJson == None and inputJsonUrl == None:
+    print "both inputJson and inputJsonUrl are empty: this can not be . existing step"
+    sys.exit(2)
 
+# inputJsonUrl takes precedence over inputJson ..
+# BECAUSE I SAY SO ....Biatch
+# Just checking if anyone ever really reads this ;-)
+if inputJsonUrl.startswith('http'):
+    inputJson = download_json_profile(inputJsonUrl)
 
 handle_profile(__pre_build_steps, phaseName)
 handle_profile(inputJson, phaseName)

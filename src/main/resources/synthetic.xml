@@ -92,7 +92,8 @@
     <type type="lm.darProfile" description="build a dar package from an input file" extends="lm.createDarPackage" >
         <property name="xldeployServer" category="input" label="xldeploy server" referenced-type="xldeploy.Server" kind="ci"/>
         <property name="scriptLocation" default="lm/darProfile.py" hidden="true" />
-        <property name="inputJson" required="true" category="input" size="large" label="project in json string" />
+        <property name="inputJson" required="false" category="input" size="large" label="profile in json string" />
+        <property name="inputJsonUrl" required="false" category="input" size="large" label="url to download the json profile from" />
         <property name="phaseName" required="true" category="input" size="large" default="build" label="phase to execute these tasks in" />
     </type>
 
