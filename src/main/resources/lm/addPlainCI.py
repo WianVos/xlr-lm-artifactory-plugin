@@ -10,11 +10,10 @@ re_space = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
 
 
 def check_available(url):
-    print requests.head(url).status_code
-    if  requests.head(url).status_code > 499:
-        return False
-    else:
-        return True
+    r = requests.head(url, verify=False)
+    r.raise_for_status()
+
+    return True
 
 def well_formed_xml(xml_string):
     """
