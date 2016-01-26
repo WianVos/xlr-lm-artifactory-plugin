@@ -1,18 +1,10 @@
 {
   "cis": [
     {
-      "deployableName": "jspwiki.war",
-      "deployableType": "java.war",
-      "deployableUrl": "http://apache.arvixe.com/jspwiki/${buildNumber}/binaries/JSPWiki.war",
+      "deployableName": "archiva-webapp-2.2.0.war",
+      "deployableType": "wlp.WebApplicationSpec",
+      "deployableUrl": "http://192.168.99.100:32769/artifactory/simple/xlr/org/apache/archiva/archiva-webapp/2.2.0/archiva-webapp-2.2.0.war",
       "linkOnly": "true"
-    },
-    {
-      "deployableName": "jspwiki2.war",
-      "deployableType": "java.war",
-      "deployableUrl": "http://apache.arvixe.com/jspwiki/${buildNumber}/binaries/JSPWiki.war",
-      "linkOnly": "true",
-      "deployableXml": "<tags><value>BPMallNodes</value></tags><provider>IBM WebSphere Adapter for JDBC</provider><jndiName>jdbc/CSW_JDBC_ORCL_CF</jndiName><customProperties><entry key='adapterID'>ResourceAdapter</entry><entry key='logFileSize'>0</entry><entry key='connectionRetryInterval'>60000</entry><entry key='Password'>{{cswJdbcCfPassword}}</entry><entry key='connectionRetryLimit'>0</entry><entry key='errorOnEmptyResultset'>true</entry><entry key='XADataSourceJNDIName'>jdbc/Claims</entry><entry key='hideConfidentialTrace'>false</entry><entry key='DatabaseVendor'>DB2</entry><entry key='logNumberOfFiles'>1</entry><entry key='connectionType'>XADataSourceJNDI</entry><entry key='AutoCommit'>false</entry></customProperties>",
-      "deployableXmlUrl": ""
     }
   ]
 }

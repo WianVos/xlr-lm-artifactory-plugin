@@ -58,9 +58,9 @@ def get_deployable_element_url(dName, dType, dXml, dUrl):
     deployable =  ET.Element(dType, name="%s" % dName)
 
     # create and add in the url bit
-    fileUrlElement = ET.Element("fileUrl")
-    fileUrlElement.text = dUrl
-    deployable.append(fileUrlElement)
+    fileUriElement = ET.Element("fileUri")
+    fileUriElement.text = dUrl
+    deployable.append(fileUriElement)
     #tag on the rest of the stuffels
     #biatch
     print "adding additional xml to element %s" % dName
