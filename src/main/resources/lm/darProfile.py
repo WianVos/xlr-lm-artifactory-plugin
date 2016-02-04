@@ -6,6 +6,7 @@
 import com.xhaus.jyson.JysonCodec as json
 from com.xebialabs.deployit.plugin.api.reflect import Type
 import requests
+
 __type_step_dict = {"cis":        "lm.addPlainCI",
                     "config" :    "lm.mergeConfigDeployables"}
 
@@ -128,8 +129,9 @@ if inputJson == None and inputJsonUrl == None:
 # inputJsonUrl takes precedence over inputJson ..
 # BECAUSE I SAY SO ....Biatch
 # Just checking if anyone ever really reads this ;-)
-if inputJsonUrl.startswith('http'):
-    inputJson = download_json_profile(inputJsonUrl)
+if inputJsonUrl:
+    if inputJsonUrl.startswith('http'):
+        inputJson = download_json_profile(inputJsonUrl)
 
 handle_profile(__pre_build_steps, phaseName)
 handle_profile(inputJson, phaseName)
