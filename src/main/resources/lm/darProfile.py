@@ -65,7 +65,8 @@ def get_target_phase(targetPhase):
     if len(phaseList) == 1:
         return phaseList[0]
     else:
-        return False
+        print "Requested phase: %s not found. Create it in the template first" % targetPhase
+        sys.exit(2)
         #should be replaced by some logic to create the phase
 
 
@@ -129,6 +130,9 @@ if inputJson == None and inputJsonUrl == None:
 # inputJsonUrl takes precedence over inputJson ..
 # BECAUSE I SAY SO ....Biatch
 # Just checking if anyone ever really reads this ;-)
+
+if inputJson:
+    inputJson = inputJson.replace('\n','').replace('\t', '').replace('\r', '')
 if inputJsonUrl:
     if inputJsonUrl.startswith('http'):
         inputJson = download_json_profile(inputJsonUrl)
