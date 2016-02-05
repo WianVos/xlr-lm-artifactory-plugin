@@ -6,22 +6,23 @@
 import com.xhaus.jyson.JysonCodec as json
 from com.xebialabs.deployit.plugin.api.reflect import Type
 import requests
+import com.xebialabs.xlrelease.api.XLReleaseServiceHolder as XLReleaseServiceHolder
+import com.xebialabs.deployit.repository.SearchParameters as SearchParameters
+import com.xebialabs.deployit.plugin.api.reflect.Type as Type
 
 __type_step_dict = {"cis":        "lm.addPlainCI",
                     "config" :    "lm.mergeConfigDeployables"}
 
 __release = getCurrentRelease()
 
-__default_data_items = {"appName" : appName,
-                        "appVersion" : appVersion,
-                        "darBuildServer" : darBuildServer,
-                        "xldeployServer" : xldeployServer}
+def find_ci_id(name, type):
+    sp = SearchParameters()
+    sp.setType(Type.valueOf(type))
 
-# pre build steps to execute
-# one should always
-__pre_build_steps = {"lm.createDarPackage" : [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : darBuildServer, "xldeployServer" : xldeployServer}]}
-__post_build_steps = {"lm.uploadDarPackage" :[{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : darBuildServer, "xldeployServer" : xldeployServer}]}
-__cleanup_build_steps = {"lm.cleanDarPackageWorkspace": [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : darBuildServer, "xldeployServer" : xldeployServer}]}
+    for p in XLReleaseServiceHolder.getRepositoryService().listEntities(sp):
+        if str(p.getTitle()) == name:
+           print p
+           return p
 
 
 
@@ -35,6 +36,8 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
     :param propertyMap: properties to add to the task
     :return:
     """
+    print propertyMap
+
     parenttaskType = Type.valueOf("xlrelease.CustomScriptTask")
 
     parentTask = parenttaskType.descriptor.newInstance("nonamerequired")
@@ -48,9 +51,14 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
         else:
             print "dropped property: %s on %s because: not applicable" % (item, taskTypeValue)
     parentTask.setPythonScript(childTask)
+    print parentTask
 
-    taskApi.addTask(str(phaseId),parentTask)
-
+    t = taskApi.addTask(str(phaseId),parentTask)
+    print t
+    ta = type(taskApi.getTask(str(t)))
+    print dir(ta)
+    print vars(ta)
+    print str(ta)
 
 
 def get_target_phase(targetPhase):
@@ -121,8 +129,32 @@ def handle_profile(profile, targetPhase):
 
             createSimpleTask(phaseId, taskTypeValue, "dar_build_task_%s_%i" % (type, title_nr), final_data_items )
 
+
+#setting global variables
+
+__dar_build_server = find_ci_id(darBuildServer['title'], 'lm.DarBuildServer')
+__xldeploy_server  = find_ci_id(xldeployServer['title'], 'xldeploy.Server')
+
+__default_data_items = {"appName" : appName,
+                        "appVersion" : appVersion,
+                        "darBuildServer" : __dar_build_server,
+                        "xldeployServer" : __xldeploy_server}
+
+# pre build steps to execute
+# one should always
+__pre_build_steps = {"lm.createDarPackage" : [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server }]}
+__post_build_steps = {"lm.uploadDarPackage" :[{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server}]}
+__cleanup_build_steps = {"lm.cleanDarPackageWorkspace": [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server}]}
+
+
+
+
+
+
 # both inputJson and inputJsonUrl cannot be None .
 # we need input
+
+
 if inputJson == None and inputJsonUrl == None:
     print "both inputJson and inputJsonUrl are empty: this can not be . existing step"
     sys.exit(2)

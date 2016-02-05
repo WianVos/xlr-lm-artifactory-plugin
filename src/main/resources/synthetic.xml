@@ -73,6 +73,11 @@
         <property name="configFileName" label="filename to pull from artifactory" category="input" kind="string" default="app_config.xml" required="true" />
     </type>
 
+    <type type="lm.mergeConfigDeployablesHttp" description="merge deployables configuration into the dar package from a http url" extends="lm.createDarPackage">
+        <property name="scriptLocation" default="lm/mergeConfigDeployablesHttp.py" hidden="true" />
+        <property name="url" category="input" label="Artifactory Server to use" referenced-type="artifactory.Server" kind="ci" />
+    </type>
+
 
     <type type="lm.cleanDarPackageWorkspace" description="clean up the Dar workspace" extends="lm.createDarPackage">
         <property name="scriptLocation" default="lm/cleanDarWorkspace.py" hidden="true" />
