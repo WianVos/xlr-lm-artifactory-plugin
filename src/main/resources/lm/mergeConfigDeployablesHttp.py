@@ -15,6 +15,7 @@ import sys
 
 import xml.parsers.expat
 import xml.etree.ElementTree as ET
+import requests
 
 
 from lm.DarBuildServer import DarBuildServer
