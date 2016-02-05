@@ -11,6 +11,7 @@
 #
 import time
 import sys
+import urllib2
 
 
 import xml.parsers.expat
@@ -35,18 +36,21 @@ def format_additional_xml(xml):
 
   return deployables
 
+# def download_deployables(url):
+#     print "downloading deployables from %s" % url
+#     error = 300
+#     output = requests.get(url, verify=False)
+#
+#     if ( output.status_code < error ) :
+#         print "Download from %s : succesfull" % url
+#         return output.text
+#     else:
+#         print 'unable to download deployables using: %s' % url
+#         return False
+
 def download_deployables(url):
-    print "downloading deployables from %s" % url
-    error = 300
-    output = requests.get(url, verify=False)
-
-    if ( output.status_code < error ) :
-        print "Download from %s : succesfull" % url
-        return output.text
-    else:
-        print 'unable to download deployables using: %s' % url
-        return False
-
+    output = urllib2.urlopen(url)
+    return str(output.read())
 
 server = DarBuildServer.createServer(darBuildServer)
 
