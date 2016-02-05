@@ -44,7 +44,7 @@ def download_deployables(url):
         print str(output.text)
         return str(output.text)
     else:
-        print 'unable to download deployables using: %s' url
+        print 'unable to download deployables using: %s' % url
         return False
 
 
