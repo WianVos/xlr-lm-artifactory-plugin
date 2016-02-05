@@ -42,8 +42,7 @@ def download_deployables(url):
 
     if ( output.status_code < error ) :
         print "Download from %s : succesfull" % url
-        print str(output.text)
-        return str(output.text)
+        return output.text
     else:
         print 'unable to download deployables using: %s' % url
         return False
