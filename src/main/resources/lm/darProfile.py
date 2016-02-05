@@ -21,7 +21,6 @@ def find_ci_id(name, type):
 
     for p in XLReleaseServiceHolder.getRepositoryService().listEntities(sp):
         if str(p.getTitle()) == name:
-           print p
            return p
 
 
@@ -51,14 +50,9 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
         else:
             print "dropped property: %s on %s because: not applicable" % (item, taskTypeValue)
     parentTask.setPythonScript(childTask)
-    print parentTask
 
-    t = taskApi.addTask(str(phaseId),parentTask)
-    print t
-    ta = type(taskApi.getTask(str(t)))
-    print dir(ta)
-    print vars(ta)
-    print str(ta)
+    taskApi.addTask(str(phaseId),parentTask)
+
 
 
 def get_target_phase(targetPhase):

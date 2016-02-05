@@ -75,7 +75,7 @@
 
     <type type="lm.mergeConfigDeployablesHttp" description="merge deployables configuration into the dar package from a http url" extends="lm.createDarPackage">
         <property name="scriptLocation" default="lm/mergeConfigDeployablesHttp.py" hidden="true" />
-        <property name="url" category="input" label="Artifactory Server to use" referenced-type="artifactory.Server" kind="ci" />
+        <property name="url" category="input" label="url to use" kind="string" />
     </type>
 
 
