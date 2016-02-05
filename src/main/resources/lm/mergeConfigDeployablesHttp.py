@@ -38,7 +38,7 @@ def format_additional_xml(xml):
 def download_deployables(url):
     print "downloading deployables from %s" % url
     error = 300
-    output = requests.get(url)
+    output = requests.get(url, verify=False)
 
     if ( output.status_code < error ) :
         print "Download from %s : succesfull" % url
