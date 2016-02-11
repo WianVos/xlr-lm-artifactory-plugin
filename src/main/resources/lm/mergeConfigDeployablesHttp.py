@@ -9,18 +9,10 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
-import time
 import sys
 import urllib2
-
-
-import xml.parsers.expat
 import xml.etree.ElementTree as ET
-import requests
-
-
 from lm.DarBuildServer import DarBuildServer
-import party
 
 
 # functions
@@ -36,20 +28,16 @@ def format_additional_xml(xml):
 
   return deployables
 
-# def download_deployables(url):
-#     print "downloading deployables from %s" % url
-#     error = 300
-#     output = requests.get(url, verify=False)
-#
-#     if ( output.status_code < error ) :
-#         print "Download from %s : succesfull" % url
-#         return output.text
-#     else:
-#         print 'unable to download deployables using: %s' % url
-#         return False
 
 def download_deployables(url):
-    output = urllib2.urlopen(url)
+    try:
+        output = urllib2.urlopen(str(url))
+    except Exception as e:
+        print "download encountered an error"
+        print "error number %s " % e.errno
+        print e.strerror
+        sys.exit(2)
+
     return str(output.read())
 
 server = DarBuildServer.createServer(darBuildServer)
