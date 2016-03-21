@@ -18,12 +18,12 @@ __release = getCurrentRelease()
 __type_title_dict = {'lm.addPlainCI' :              {'prefix'       : 'add',
                                                     'data_fields'   : ['deployableType', 'deployableName'],
                                                     'postfix'       : 'to deployment package'},
-                     'lm.mergeConfigDeployables' :  {'prefix'       : 'adding',
+                     'lm.mergeConfigDeployablesHttp' :  {'prefix'       : 'adding',
                                                     'postfix'       : 'config xml to package'},
                      'lm.uploadDarPackage' :        {'prefix'       : 'uploading dar to',
-                                                    'datafields'    : ['xldeployServer']},
+                                                    'datafields'    : 'xldeployServer'},
                      'lm.createDarPackage' :        {'prefix'       : 'create workspace on',
-                                                     'data_fields'  : ['darBuildServer']}
+                                                     'data_fields'  : 'darBuildServer'}
                     }
 
 def find_ci_id(name, type):
@@ -93,7 +93,8 @@ def load_profile(profile):
     if type(profile) is dict:
         return profile
     else:
-       return json.loads(profile)
+
+       return json.loads(profile.replace('\n','').replace('\t', '').replace('\r', ''))
 
 
 
@@ -155,7 +156,7 @@ def handle_profile(profile, targetPhase):
             final_data_items = dict(data_item.items() + __default_data_items.items())
             title_nr += 1
 
-            title = get_title("dar_build_task_%s_%i" % (type, title_nr), taskTypeValue, data)
+            title = get_title("dar_build_task_%s_%i" % (type, title_nr), taskTypeValue, data_item)
 
             createSimpleTask(phaseId, taskTypeValue, title, final_data_items )
 
@@ -174,12 +175,15 @@ def get_title(title, citype, data):
 
                 if type(out) == list:
                     for e in out:
+
+
                         try:
-                            new_title.append(data[0][e])
+
+                            new_title.append(str(data[e]))
                         except KeyError:
                             print 'unable to retrieve %s from step data' % e
                 else:
-                    new_title.append(out)
+                      new_title.append(out)
             except KeyError:
                 print 'no data defined for field %s' % x
 
