@@ -5,7 +5,7 @@
 #
 import com.xhaus.jyson.JysonCodec as json
 from com.xebialabs.deployit.plugin.api.reflect import Type
-import requests
+import requests, re
 import com.xebialabs.xlrelease.api.XLReleaseServiceHolder as XLReleaseServiceHolder
 import com.xebialabs.deployit.repository.SearchParameters as SearchParameters
 import com.xebialabs.deployit.plugin.api.reflect.Type as Type
@@ -14,6 +14,17 @@ __type_step_dict = {"cis":        "lm.addPlainCI",
                     "config" :    "lm.mergeConfigDeployables"}
 
 __release = getCurrentRelease()
+
+__type_title_dict = {'lm.addPlainCI' :              {'prefix'       : 'add',
+                                                    'data_fields'   : ['deployableType', 'deployableName'],
+                                                    'postfix'       : 'to deployment package'},
+                     'lm.mergeConfigDeployables' :  {'prefix'       : 'adding',
+                                                    'postfix'       : 'config xml to package'},
+                     'lm.uploadDarPackage' :        {'prefix'       : 'uploading dar to',
+                                                    'datafields'    : ['xldeployServer']},
+                     'lm.createDarPackage' :        {'prefix'       : 'create workspace on',
+                                                     'data_fields'  : ['darBuildServer']}
+                    }
 
 def find_ci_id(name, type):
     sp = SearchParameters()
@@ -35,7 +46,7 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
     :param propertyMap: properties to add to the task
     :return:
     """
-    print propertyMap
+    #print propertyMap
 
     parenttaskType = Type.valueOf("xlrelease.CustomScriptTask")
 
@@ -84,10 +95,13 @@ def load_profile(profile):
     else:
        return json.loads(profile)
 
+
+
+
 def download_json_profile(url):
     print "downloading json from %s" % url
     error = 300
-    output = requests.get(url)
+    output = requests.get(url, verify=False)
 
     if ( output.status_code < error ) :
         print "Download from %s : succesfull" % url
@@ -97,6 +111,26 @@ def download_json_profile(url):
         print 'unable to download json'
         return False
 
+# def resolve_variables_in_profile(dict):
+#     """
+#     resolve the variables
+#     :return:
+#     """
+#     variable_start_regex = re.compile('^\$\{', re.IGNORECASE)
+#     variables = getCurrentRelease().getVariableValues()
+#
+#     # loop over the profile dict and check if there are variables in any values..
+#     # variables are not allowed in keys
+#     for key, value in dict.items():
+#         if type(value) == dict:
+#             return resolve_variables_in_profile(value)
+#         if type(value) == str:
+#             if re.match(variable_start_regex, value) != None:
+#                 for vk, vv in variables.items():
+#                     if vk in value:
+#                         value.replace(vk, vv)
+#                         dict[key] = value
+#     return dict
 
 def handle_profile(profile, targetPhase):
     """
@@ -121,8 +155,39 @@ def handle_profile(profile, targetPhase):
             final_data_items = dict(data_item.items() + __default_data_items.items())
             title_nr += 1
 
-            createSimpleTask(phaseId, taskTypeValue, "dar_build_task_%s_%i" % (type, title_nr), final_data_items )
+            title = get_title("dar_build_task_%s_%i" % (type, title_nr), taskTypeValue, data)
 
+            createSimpleTask(phaseId, taskTypeValue, title, final_data_items )
+
+
+def get_title(title, citype, data):
+
+    print "GATHERING TITLE for %s" % citype
+
+    if __type_title_dict.has_key(citype):
+        print __type_title_dict[citype]
+
+        new_title = []
+        for x in ['prefix', 'data_fields', 'postfix']:
+            try:
+                out = __type_title_dict[citype][x]
+
+                if type(out) == list:
+                    for e in out:
+                        try:
+                            new_title.append(data[0][e])
+                        except KeyError:
+                            print 'unable to retrieve %s from step data' % e
+                else:
+                    new_title.append(out)
+            except KeyError:
+                print 'no data defined for field %s' % x
+
+
+
+        return " ".join(new_title)
+    else:
+        return title
 
 #setting global variables
 
