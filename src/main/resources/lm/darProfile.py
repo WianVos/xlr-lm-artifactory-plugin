@@ -48,6 +48,12 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
     """
     #print propertyMap
 
+    print "CreateSimpleTask"
+    print phaseId
+    print taskTypeValue
+    print title
+    print propertyMap
+
     parenttaskType = Type.valueOf("xlrelease.CustomScriptTask")
 
     parentTask = parenttaskType.descriptor.newInstance("nonamerequired")
@@ -157,6 +163,8 @@ def handle_profile(profile, targetPhase):
             title_nr += 1
 
             title = get_title("dar_build_task_%s_%i" % (type, title_nr), taskTypeValue, data_item)
+            print "DEBUG Data_Item: %s " % data_item
+            print "DEBUG Title: %s" % title
 
             createSimpleTask(phaseId, taskTypeValue, title, final_data_items )
 
