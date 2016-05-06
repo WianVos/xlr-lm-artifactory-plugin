@@ -3,6 +3,7 @@
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
 # FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
 #
+from Base import Base
 import com.xhaus.jyson.JysonCodec as json
 from com.xebialabs.deployit.plugin.api.reflect import Type
 import requests, re
@@ -21,7 +22,7 @@ __type_title_dict = {'lm.addPlainCI' :              {'prefix'       : 'add',
                      'lm.mergeConfigDeployablesHttp' :  {'prefix'       : 'adding',
                                                     'postfix'       : 'config xml to package'},
                      'lm.uploadDarPackage' :        {'prefix'       : 'uploading dar to',
-                                                    'datafields'    : 'xldeployServer'},
+                                                     'datafields'   : 'xldeployServer'},
                      'lm.createDarPackage' :        {'prefix'       : 'create workspace on',
                                                      'data_fields'  : 'darBuildServer'}
                     }
@@ -48,12 +49,6 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
     """
     #print propertyMap
 
-    print "CreateSimpleTask"
-    print phaseId
-    print taskTypeValue
-    print title
-    print propertyMap
-
     parenttaskType = Type.valueOf("xlrelease.CustomScriptTask")
 
     parentTask = parenttaskType.descriptor.newInstance("nonamerequired")
@@ -65,9 +60,10 @@ def createSimpleTask(phaseId, taskTypeValue, title, propertyMap):
         if childTask.hasProperty(item):
             childTask.setProperty(item,propertyMap[item])
         else:
-            print "dropped property: %s on %s because: not applicable" % (item, taskTypeValue)
+            Base.info( "dropped property: %s on %s because: not applicable" % (item, taskTypeValue))
     parentTask.setPythonScript(childTask)
 
+    print str(parentTask)
     taskApi.addTask(str(phaseId),parentTask)
 
 
@@ -84,8 +80,7 @@ def get_target_phase(targetPhase):
     if len(phaseList) == 1:
         return phaseList[0]
     else:
-        print "Requested phase: %s not found. Create it in the template first" % targetPhase
-        sys.exit(2)
+        Base.fatal("Requested phase: %s not found. Create it in the template first" % targetPhase)
         #should be replaced by some logic to create the phase
 
 
@@ -99,23 +94,23 @@ def load_profile(profile):
     if type(profile) is dict:
         return profile
     else:
-
+       Base.info("loading profile from json")
        return json.loads(profile.replace('\n','').replace('\t', '').replace('\r', ''))
 
 
 
 
 def download_json_profile(url):
-    print "downloading json from %s" % url
+    Base.info("downloading json from %s" % url)
     error = 300
     output = requests.get(url, verify=False)
 
     if ( output.status_code < error ) :
-        print "Download from %s : succesfull" % url
-        print str(output.text)
+        Base.info("Download from %s : succesfull" % url)
+        Base.info( str(output.text))
         return str(output.text)
     else:
-        print 'unable to download json'
+        Base.warning('unable to download json')
         return False
 
 # def resolve_variables_in_profile(dict):
@@ -163,15 +158,14 @@ def handle_profile(profile, targetPhase):
             title_nr += 1
 
             title = get_title("dar_build_task_%s_%i" % (type, title_nr), taskTypeValue, data_item)
-            print "DEBUG Data_Item: %s " % data_item
-            print "DEBUG Title: %s" % title
+            Base.info("creating step: %s" % title)
 
             createSimpleTask(phaseId, taskTypeValue, title, final_data_items )
 
 
 def get_title(title, citype, data):
 
-    print "GATHERING TITLE for %s" % citype
+    Base.info("GATHERING TITLE for %s" % citype)
 
     if __type_title_dict.has_key(citype):
         print __type_title_dict[citype]
@@ -189,11 +183,11 @@ def get_title(title, citype, data):
 
                             new_title.append(str(data[e]))
                         except KeyError:
-                            print 'unable to retrieve %s from step data' % e
+                            Base.warning( 'unable to retrieve %s from step data' % e)
                 else:
                       new_title.append(out)
             except KeyError:
-                print 'no data defined for field %s' % x
+                Base.warning('no data defined for field %s' % x)
 
 
 
@@ -214,7 +208,7 @@ __default_data_items = {"appName" : appName,
 # pre build steps to execute
 # one should always
 __pre_build_steps = {"lm.createDarPackage" : [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server }]}
-__post_build_steps = {"lm.uploadDarPackage" :[{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server}]}
+__post_build_steps = {"lm.uploadDarPackage" :[{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server }]}
 __cleanup_build_steps = {"lm.cleanDarPackageWorkspace": [{"appName" : appName, "appVersion" : appVersion, "darBuildServer" : __dar_build_server , "xldeployServer" : __xldeploy_server}]}
 
 
@@ -227,18 +221,19 @@ __cleanup_build_steps = {"lm.cleanDarPackageWorkspace": [{"appName" : appName, "
 
 
 if inputJson == None and inputJsonUrl == None:
-    print "both inputJson and inputJsonUrl are empty: this can not be . existing step"
-    sys.exit(2)
+    Base.fatal("both inputJson and inputJsonUrl are empty: this can not be . existing step")
 
 # inputJsonUrl takes precedence over inputJson ..
 # BECAUSE I SAY SO ....Biatch
 # Just checking if anyone ever really reads this ;-)
 
-if inputJson:
-    inputJson = inputJson.replace('\n','').replace('\t', '').replace('\r', '')
+
 if inputJsonUrl:
     if inputJsonUrl.startswith('http'):
         inputJson = download_json_profile(inputJsonUrl)
+
+if inputJson:
+    inputJson = inputJson.replace('\n','').replace('\t', '').replace('\r', '')
 
 handle_profile(__pre_build_steps, phaseName)
 handle_profile(inputJson, phaseName)

@@ -59,3 +59,5 @@ for child in root:
 updatedXml = ET.tostring(root,encoding="us-ascii")
 
 server.write_manifest(appName, appVersion, updatedXml)
+
+server.closeConnection()

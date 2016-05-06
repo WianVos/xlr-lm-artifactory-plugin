@@ -24,6 +24,7 @@ class DarBuildServer(object):
         self.session.close_conn()
 
     def closeConnection(self):
+        print "closing ssh connection"
         self.session.close_conn()
 
     @staticmethod

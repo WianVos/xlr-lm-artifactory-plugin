@@ -10,3 +10,4 @@ server = DarBuildServer.createServer(darBuildServer)
 
 server.init_dar(appName, appVersion)
 
+server.closeConnection()
