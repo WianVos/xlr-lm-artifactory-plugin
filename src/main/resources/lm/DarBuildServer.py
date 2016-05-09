@@ -1,6 +1,7 @@
 import os ,sys, time, ast,datetime
 import string
 import random
+import time
 
 from string import Template
 
@@ -9,15 +10,45 @@ from overtherepy import SshConnectionOptions, OverthereHost, OverthereHostSessio
 class DarBuildServer(object):
     def __init__(self, server):
 
-        self.sshOpts = SshConnectionOptions(server['host'], username=server['username'],privateKeyFile=server['key_file'],password=server['password'],port=server['port'] )
+        self.retryCount = server['retryCount']
+        if self.retryCount == 0:
+            self.retryCount = 1
 
+        self.retryBaseInterval = 60
+
+
+        self.sshOpts = SshConnectionOptions(server['host'], username=server['username'],privateKeyFile=server['key_file'],password=server['password'],port=server['port'])
         self.host = OverthereHost(self.sshOpts)
         self.session = OverthereHostSession(self.host)
-        self.zipBinary = server['pathToZipExecutable']
-        self.workingDirectory = server['workingDirectory']
-        self.create_directory(self.workingDirectory)
-        workDir = self.session.remote_file(self.workingDirectory)
-        self.session.get_conn().setWorkingDirectory(workDir)
+
+
+        tries = 0
+
+        while tries < self.retryCount:
+            tries += 1
+            try:
+                self.zipBinary = server['pathToZipExecutable']
+                self.workingDirectory = server['workingDirectory']
+                self.create_directory(self.workingDirectory)
+                workDir = self.session.remote_file(self.workingDirectory)
+                self.session.get_conn().setWorkingDirectory(workDir)
+                break
+            except :
+                if tries > 3:
+                    print sys.exc_info()[0]
+                    print sys.exc_info()[1]
+
+                if tries > self.retryCount :
+                    print sys.exc_info()[2].format_stack()
+                    print "we were unable to setup a connection to server: %s after %i retries" % (server['host'], tries)
+                    sys.exit(2)
+                sleeptime = self.retryBaseInterval * tries
+                print "retrying to setup a connection to server %s in %i seconds" % (server['host'], sleeptime)
+                time.sleep(sleeptime)
+
+
+
+
 
     def __del__(self):
         self.destroy_work_directory()

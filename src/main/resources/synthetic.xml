@@ -14,6 +14,7 @@
         <property name="key_file" label="private keyfile" kind="string" required="false" default="none"/>
         <property name="workingDirectory" label="Filesystem Workspace" kind="string" />
         <property name="pathToZipExecutable" label="path to the Zip binary" kind="string" default="/usr/bin/zip" hidden="true"/>
+        <property name="retryCount" label="number of times we want to retry setting up a connection to the buildserver" kind="integer" default="5" hidden="false"/>
     </type>
 
     <type type="lm.createDarPackage" description="create an initial Dar package on the Dar Buildserver" extends="xlrelease.PythonScript">
