@@ -105,13 +105,46 @@ def download_json_profile(url):
     error = 300
     output = requests.get(url, verify=False)
 
-    if ( output.status_code < error ) :
-        Base.info("Download from %s : succesfull" % url)
-        Base.info( str(output.text))
-        return str(output.text)
-    else:
-        Base.warning('unable to download json')
-        return False
+
+
+    #adding in retry to make all this stuff a little more robust
+    # if all else fails .. we are going to retry 10 times ..
+    retries = 10
+    nr_tries = 0
+
+
+    while True:
+        # increment trie counter
+        nr_tries += 1
+        Base.info("trying to fetch json from url %s , try nr: %i" % (url, nr_tries))
+
+
+        # try to fetch a response
+        response = requests.get(url, verify=False, **self.requests_params)
+
+        # if the status code is above 299 (which usually means that we have a problem) retry
+        if response.status_code > 299:
+
+            # if the number of retries exceeds 10 fail hard .. cuz that is how we roll
+            if nr_tries > retries:
+              Base.fatal('Unable to retrieve json from url after %i retries' % retries )
+
+            # warn the user
+            Base.warning("unable to retrieve json from url: %s" % url)
+
+            # it is good form to back off a failing remote system a bit .. every retry we are gonna wait 5 seconds longer . Coffee time !!!!
+            sleeptime = 5 * int(nr_tries)
+
+            Base.warning("timing out for: %i seconds" % sleeptime)
+
+            # sleep dammit .. i need it ..
+            time.sleep(sleeptime)
+        else:
+            Base.info("Download from %s : succesfull" % url)
+            Base.info( str(response.text))
+            return str(response.text)
+
+
 
 # def resolve_variables_in_profile(dict):
 #     """

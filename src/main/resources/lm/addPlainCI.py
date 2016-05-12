@@ -10,6 +10,44 @@ re_space = re.compile('>\n\s+([^<>\s].*?)\n\s+</', re.DOTALL)
 
 
 def check_available(url):
+
+    retries = 10
+    nr_tries = 0
+
+
+    while True:
+        # increment trie counter
+        nr_tries += 1
+        Base.info("trying to see if %s is a valid artifact to use. Try nr: %i" % (url, nr_tries))
+
+
+        # try to fetch a response
+        response = requests.head(url, verify=False)
+
+        # if the status code is above 299 (which usually means that we have a problem) retry
+        if response.status_code > 299:
+
+            # if the number of retries exceeds 10 fail hard .. cuz that is how we roll
+            if nr_tries > retries:
+              Base.fatal('Unable to retrieve artifact from url after %i retries' % retries )
+              response.raise_for_status()
+            # warn the user
+            Base.warning("unable to retrieve head for url %s" %  url)
+
+            # it is good form to back off a failing remote system a bit .. every retry we are gonna wait 5 seconds longer . Coffee time !!!!
+            sleeptime = 5 * int(nr_tries)
+
+            Base.warning("timing out for: %i seconds" % sleeptime)
+
+            # sleep dammit .. i need it ..
+            time.sleep(sleeptime)
+        else:
+            Base.info("check for artifact from %s : succesfull" % url)
+            Base.info( str(response.text))
+            return str(response.text)
+
+
+
     r = requests.head(url, verify=False)
     r.raise_for_status()
 

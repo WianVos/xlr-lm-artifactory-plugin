@@ -104,6 +104,8 @@ class DarBuildServer(object):
         else:
           self.create_directory(dirName)
 
+
+
         self.execute_command("/usr/bin/curl --retry 5 --retry-delay 2 -k -L -o %s %s" % (outfile, url))
 
     def read_manifest(self, appName, appVersion):
