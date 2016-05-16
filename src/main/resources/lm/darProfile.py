@@ -120,7 +120,7 @@ def download_json_profile(url):
 
 
         # try to fetch a response
-        response = requests.get(url, verify=False, **self.requests_params)
+        response = requests.get(url, verify=False)
 
         # if the status code is above 299 (which usually means that we have a problem) retry
         if response.status_code > 299:
